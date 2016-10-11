@@ -3,12 +3,15 @@ COMP 20: Web Programming
 Lab 5: Closed Captioning
 
 What has been implemented correctly
-
+The page loads the video and displays the correct quotes for each line
+of the scene.
 
 What has not been implemented correctly
-
+The closed captioning is based on the time elapsed of the video. There
+may have been a more efficient way to implement this.
 
 Collaboration
-
+None
 
 Hours completing the assignment
+3
