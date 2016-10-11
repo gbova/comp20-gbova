@@ -14,7 +14,56 @@
 <div id="movie_quotes"></div>
 
 <script>
-	// Complete this section and create a CSS file named style.css
+	movie_quote = document.getElementById("movie_quotes")
+	video = document.getElementById("classic_video")
+	video.addEventListener("timeupdate", updateQuote)
+	
+	// Update closed captioning based on the time of the video elapsed
+	function updateQuote() {
+		if (video.currentTime < 24) {
+			movie_quote.innerHTML = " "
+		} else if (video.currentTime < 28) {
+			movie_quote.innerHTML = "Igor: <div id=quote> DR. FRANKENSTEIN?!?!? </div>"
+		} else if (video.currentTime < 34) {
+			movie_quote.innerHTML = "Dr. Frederick Frankenstein: <div id=quote> Frokensteen. </div>"
+		} else if (video.currentTime < 36.5) {
+			movie_quote.innerHTML = "Igor: <div id=quote> You're putting me on. </div>"
+		} else if (video.currentTime < 39) {
+			movie_quote.innerHTML = "Dr. Frederick Frankenstein: <div id=quote> No, it pronounced, 'Frokensteen'. </div>"
+		} else if (video.currentTime < 41.5) {
+			movie_quote.innerHTML = "Igor: <div id=quote> Do you also say Froaderick? </div>"
+		} else if (video.currentTime < 43.5) {
+			movie_quote.innerHTML = "Dr. Frederick Frankenstein: <div id=quote> No . . . 'Frederick.' </div>"
+		} else if (video.currentTime < 47) {
+			movie_quote.innerHTML = "Igor: <div id=quote> Well, why isn't it 'Froaderick Frokensteen'? </div>"
+		} else if (video.currentTime < 49) {
+			movie_quote.innerHTML = "Dr. Frederick Frankenstein: <div id=quote> It isn't, it's 'Frederick Frokensteen' </div>"
+		} else if (video.currentTime < 51.5) {
+			movie_quote.innerHTML = "Igor: <div id=quote> I see. </div>"
+		} else if (video.currentTime < 53.5) {
+			movie_quote.innerHTML = "Dr. Frederick Frankenstein: <div id=quote> You must be Igor. [He pronounces it ee-gor.] </div>"
+		} else if (video.currentTime < 55.5) {
+			movie_quote.innerHTML = "Igor: <div id=quote> No, it's pronounced 'eye-gor.' </div>"
+		} else if (video.currentTime < 58.75) {
+			movie_quote.innerHTML = "Dr. Frederick Frankenstein: <div id=quote> But they told me it was 'ee-gor'... </div>"
+		} else if (video.currentTime < 60) {
+			movie_quote.innerHTML = "Igor: <div id=quote> Well, they were wrong then, weren't they? </div>"
+		} else if (video.currentTime < 64.5) {
+			movie_quote.innerHTML = "Dr. Frederick Frankenstein: <div id=quote> Uh, you were sent here by Herr Falkstein, weren't you? </div>"
+		} else if (video.currentTime < 69.5) {
+			movie_quote.innerHTML = "Igor: <div id=quote> Yes. My grandfather used to work for your grandfather. </div>"
+		} else if (video.currentTime < 71.5) {
+			movie_quote.innerHTML = "Dr. Frederick Frankenstein: <div id=quote> How nice. </div>"
+		} else if (video.currentTime < 74) {
+			movie_quote.innerHTML = "Igor: <div id=quote> Of course the rates have gone up. </div>"
+		} else if (video.currentTime < 88.5) {
+			movie_quote.innerHTML = "Dr. Frederick Frankenstein: <div id=quote> Of course, of course, I'm sure we'll get along splendidly. Oh, I uh, you know I don't mean to embarrass you, but I'm rather a brilliant surgeon. Perhaps I can help you with that hump. <div>"
+		} else if (video.currentTime < 91) {
+			movie_quote.innerHTML = "Igor: <div id=quote> What hump? </div>"
+		} else {
+			movie_quote.innerHTML = "The End!"
+		} 
+	}
 </script>
 </body>
 </html>	
