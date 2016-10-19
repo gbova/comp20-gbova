@@ -318,6 +318,14 @@ function renderMap() {
 
 
 
+
+	// Custom color for user's location pin
+	var mePinColor = "7373c7";
+	var mePinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
+		+ mePinColor, new google.maps.Size(21, 34), new google.maps.Point(0,0), new google.maps.Point(10, 34));
+	var mePinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+		new google.maps.Size(40, 37), new google.maps.Point(0, 0), new google.maps.Point(12, 35));
+
 	// Create a marker for the user and center there
 	me = new google.maps.LatLng(myLat, myLng);
 
@@ -327,7 +335,9 @@ function renderMap() {
 	// Create a marker
 	marker = new google.maps.Marker({
 		position: me,
-		title: "Your location"
+		title: "Your location",
+		icon: mePinImage,
+        shadow: mePinShadow
 	});
 	marker.setMap(map);
 
