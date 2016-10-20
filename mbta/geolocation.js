@@ -2,6 +2,30 @@ var myLat = 0;
 var myLng = 0;
 var request = new XMLHttpRequest();
 var me = new google.maps.LatLng(myLat, myLng);
+
+var jfkPosition = new google.maps.LatLng(42.320685, -71.052391);
+var savinHillPosition = new google.maps.LatLng(42.31129, -71.053331);
+var fieldsCornerPosition = new google.maps.LatLng(42.300093, -71.061667);
+var shawmutPosition = new google.maps.LatLng(42.29312583, -71.06573796000001);
+var ashmontPosition = new google.maps.LatLng(42.284652, -71.06448899999999);
+var braintreePosition = new google.maps.LatLng(42.2078543, -71.0011385);
+var quincyAPosition = new google.maps.LatLng(42.233391, -71.007153);
+var quincyCPosition = new google.maps.LatLng(42.251809, -71.005409);
+var wollastonPosition = new google.maps.LatLng(42.2665139, -71.0203369);
+var northQuincyPosition = new google.maps.LatLng(42.275275, -71.0203369);
+var alewifePosition = new google.maps.LatLng(42.395428, -71.142483);
+var davisPosition = new google.maps.LatLng(42.39674, -71.121815);
+var porterPosition = new google.maps.LatLng(42.3884, -71.11914899999999);
+var harvardPosition = new google.maps.LatLng(42.373362, -71.118956);
+var centralPosition = new google.maps.LatLng(42.373362, -71.118956);
+var kendallPosition = new google.maps.LatLng(42.36249079, -71.08617653);
+var charlesMGHPosition = new google.maps.LatLng(42.361166, -71.070628);
+var parkPosition = new google.maps.LatLng(42.35639457, -71.0624242);
+var downtownCrossingPosition = new google.maps.LatLng(42.355518, -71.060225);
+var southPosition = new google.maps.LatLng(42.352271, -71.05524200000001);
+var broadwayPosition = new google.maps.LatLng(42.342622, -71.056967);
+var andrewPosition = new google.maps.LatLng(42.330154, -71.057655);
+
 var myOptions = {
 	zoom: 13, // The larger the zoom number, the bigger the zoom
 	center: me,
@@ -45,7 +69,7 @@ function renderMap() {
 	
 	// Create a marker for Andrew
 	andrewMarker = new google.maps.Marker({
-		position: new google.maps.LatLng(42.330154, -71.057655),
+		position: andrewPosition,
 		title: "Andrew",
 		icon: stationImage,
         shadow: stationShadow
@@ -60,7 +84,7 @@ function renderMap() {
 
 	// Create a marker for South Station
 	southStation = new google.maps.Marker({
-		position: new google.maps.LatLng(42.352271, -71.05524200000001),
+		position: southPosition,
 		title: "South Station",
 		icon: stationImage,
         shadow: stationShadow
@@ -75,7 +99,7 @@ function renderMap() {
 
 	// Create a marker for Porter Square
 	porterSquare = new google.maps.Marker({
-		position: new google.maps.LatLng(42.3884, -71.11914899999999),
+		position: porterPosition,
 		title: "Porter Square",
 		icon: stationImage,
         shadow: stationShadow
@@ -89,7 +113,7 @@ function renderMap() {
 
 	// Create a marker for Harvard Square
 	harvardSquare = new google.maps.Marker({
-		position: new google.maps.LatLng(42.373362, -71.118956),
+		position: harvardPosition,
 		title: "Harvard Square",
 		icon: stationImage,
         shadow: stationShadow
@@ -104,7 +128,7 @@ function renderMap() {
 
 	// Create a marker for JFK/UMass
 	jfkMarker = new google.maps.Marker({
-		position: new google.maps.LatLng(42.320685, -71.052391),
+		position: jfkPosition,
 		title: "JFK/UMass",
 		icon: stationImage,
         shadow: stationShadow
@@ -119,7 +143,7 @@ function renderMap() {
 
 	// Create a marker for Savin Hill
 	savinHill = new google.maps.Marker({
-		position: new google.maps.LatLng(42.31129, -71.053331),
+		position: savinHillPosition,
 		title: "Savin Hill",
 		icon: stationImage,
         shadow: stationShadow
@@ -134,7 +158,7 @@ function renderMap() {
 
 	// Create a marker for Park Street
 	parkStreet = new google.maps.Marker({
-		position: new google.maps.LatLng(42.35639457, -71.0624242),
+		position: parkPosition,
 		title: "Park Street",
 		icon: stationImage,
         shadow: stationShadow
@@ -149,7 +173,7 @@ function renderMap() {
 
 	// Create a marker for Broadway
 	broadway = new google.maps.Marker({
-		position: new google.maps.LatLng(42.342622, -71.056967),
+		position: broadwayPosition,
 		title: "Broadway",
 		icon: stationImage,
         shadow: stationShadow
@@ -164,7 +188,7 @@ function renderMap() {
 
 	// Create a marker for North Quincy
 	northQuincy = new google.maps.Marker({
-		position: new google.maps.LatLng(42.275275, -71.029583),
+		position: northQuincyPosition,
 		title: "North Quincy",
 		icon: stationImage,
         shadow: stationShadow
@@ -179,7 +203,7 @@ function renderMap() {
 
 	// Create a marker for Shawmut
 	shawmut = new google.maps.Marker({
-		position: new google.maps.LatLng(42.29312583, -71.06573796000001),
+		position: shawmutPosition,
 		title: "Shawmut",
 		icon: stationImage,
         shadow: stationShadow
@@ -194,7 +218,7 @@ function renderMap() {
 
 	// Create a marker for Davis
 	davis = new google.maps.Marker({
-		position: new google.maps.LatLng(42.39674, -71.121815),
+		position: davisPosition,
 		title: "Davis",
 		icon: stationImage,
         shadow: stationShadow
@@ -209,7 +233,7 @@ function renderMap() {
 
 	// Create a marker for Alewife
 	alewife = new google.maps.Marker({
-		position: new google.maps.LatLng(42.395428, -71.142483),
+		position: alewifePosition,
 		title: "Alewife",
 		icon: stationImage,
         shadow: stationShadow
@@ -224,7 +248,7 @@ function renderMap() {
 
 	// Create a marker for Kendall/MIT
 	kendallMarker = new google.maps.Marker({
-		position: new google.maps.LatLng(42.36249079, -71.08617653),
+		position: kendallPosition,
 		title: "Kendall/MIT",
 		icon: stationImage,
         shadow: stationShadow,
@@ -241,7 +265,7 @@ function renderMap() {
 
 	// Create a marker for Charles/MGH
 	charlesMGH = new google.maps.Marker({
-		position: new google.maps.LatLng(42.361166, -71.070628),
+		position: charlesMGHPosition,
 		title: "Charles/MGH",
 		icon: stationImage,
         shadow: stationShadow
@@ -255,7 +279,7 @@ function renderMap() {
 
 	// Create a marker for Downtown Crossing
 	downtownCrossing = new google.maps.Marker({
-		position: new google.maps.LatLng(42.355518, -71.060225),
+		position: downtownCrossingPosition,
 		title: "Downtown Crossing",
 		icon: stationImage,
         shadow: stationShadow
@@ -269,7 +293,7 @@ function renderMap() {
 
 	// Create a marker for Quincy Center
 	quincyCenter = new google.maps.Marker({
-		position: new google.maps.LatLng(42.251809, -71.005409),
+		position: quincyCPosition,
 		title: "Quincy Center",
 		icon: stationImage,
         shadow: stationShadow
@@ -283,7 +307,7 @@ function renderMap() {
 
 	// Create a marker for Quincy Adams
 	quincyAdams = new google.maps.Marker({
-		position: new google.maps.LatLng(42.233391, -71.007153),
+		position: quincyAPosition,
 		title: "Quincy Adams",
 		icon: stationImage,
         shadow: stationShadow
@@ -298,7 +322,7 @@ function renderMap() {
 
 	// Create a marker for Ashmont
 	ashmont = new google.maps.Marker({
-		position: new google.maps.LatLng(42.284652, -71.06448899999999),
+		position: ashmontPosition,
 		title: "Ashmont",
 		icon: stationImage,
         shadow: stationShadow
@@ -313,7 +337,7 @@ function renderMap() {
 
 	// Create a marker for Wollaston
 	wollaston = new google.maps.Marker({
-		position: new google.maps.LatLng(42.2665139, -71.0203369),
+		position: wollastonPosition,
 		title: "Wollaston",
 		icon: stationImage,
         shadow: stationShadow
@@ -328,7 +352,7 @@ function renderMap() {
 
 	// Create a marker for Fields Corner
 	fieldsCorner = new google.maps.Marker({
-		position: new google.maps.LatLng(42.300093, -71.061667),
+		position: fieldsCornerPosition,
 		title: "Fields Corner",
 		icon: stationImage,
         shadow: stationShadow
@@ -343,7 +367,7 @@ function renderMap() {
 
 	// Create a marker for Central Square
 	centralSquare = new google.maps.Marker({
-		position: new google.maps.LatLng(42.365486, -71.103802),
+		position: centralPosition,
 		title: "Central Square",
 		icon: stationImage,
         shadow: stationShadow
@@ -358,7 +382,7 @@ function renderMap() {
 
 	// Create a marker for Braintree
 	braintree = new google.maps.Marker({
-		position: new google.maps.LatLng(42.2078543, -71.0011385),
+		position: braintreePosition,
 		title: "Braintree",
 		icon: stationImage,
         shadow: stationShadow
@@ -405,19 +429,23 @@ function renderMap() {
 
 	// The path that the red line follows:
 	var redLineCoordinates = [
-		{lat: 42.395428, lng: -71.142483},			// Alewife
-        {lat: 42.39674, lng: -71.121815},			// Davis
-        {lat: 42.3884, lng: -71.11914899999999},	// Porter
-        {lat: 42.373362, lng: -71.118956},			// Harvard
-        {lat: 42.365486, lng: -71.103802},			// Central
-        {lat: 42.36249079, lng: -71.08617653},		// Kendall
-        {lat: 42.361166, lng: -71.070628},			// Charles/MGH
-        {lat: 42.35639457, lng: -71.0624242},		// Park
-        {lat: 42.355518, lng: -71.060225},			// Downtown Crossing
-        {lat: 42.352271, lng: -71.05524200000001},	// South
-        {lat: 42.342622, lng: -71.056967},			// Broadway
-        {lat: 42.330154, lng: -71.057655},			// Andrew
-        {lat: 42.320685, lng: -71.052391}			// JFK/UMass
+		alewifePosition,
+		davisPosition,
+		porterPosition,
+		harvardPosition,
+		centralPosition,
+        kendallPosition,
+        charlesMGHPosition,
+        parkPosition,
+        downtownCrossingPosition,
+        southPosition,
+        broadwayPosition,
+        andrewPosition,
+        jfkPosition,
+    	savinHillPosition,
+		fieldsCornerPosition,
+		shawmutPosition,
+		ashmontPosition
     ];
     var redLinePath = new google.maps.Polyline({
     	path: redLineCoordinates,
@@ -430,12 +458,12 @@ function renderMap() {
 
     // The red line splits at JFK: this is the Braintree line:
 	var braintreeCoordinates = [
-        {lat: 42.320685, lng: -71.052391},			// JFK/UMass
-        {lat: 42.275275, lng: -71.029583},			// North Quincy
-        {lat: 42.2665139, lng: -71.0203369},		// Wollaston
-        {lat: 42.251809, lng: -71.005409},			// Quincy Center
-        {lat: 42.233391, lng: -71.007153},			// Quincy Adams
-        {lat: 42.2078543, lng: -71.0011385}			// Braintree
+		jfkPosition,
+		northQuincyPosition,
+        wollastonPosition,
+        quincyCPosition,
+        quincyAPosition,
+        braintreePosition
     ];
     var braintreePath = new google.maps.Polyline({
     	path: braintreeCoordinates,
@@ -444,23 +472,5 @@ function renderMap() {
         strokeOpacity: 1.0,
         strokeWeight: 2
     });
-    braintreePath.setMap(map);
-
-    // This is the Ashmont line:
-	var braintreeCoordinates = [
-        {lat: 42.320685, lng: -71.052391},				// JFK/UMass
-        {lat: 42.31129, lng: -71.053331},				// Savin Hill
-        {lat: 42.300093, lng: -71.061667},				// Fields Corner
-        {lat: 42.29312583, lng: -71.06573796000001},	// Shawmut Station
-        {lat: 42.284652, lng: -71.06448899999999}		// Ashmont
-    ];
-    var braintreePath = new google.maps.Polyline({
-    	path: braintreeCoordinates,
-        geodesic: true,
-        strokeColor: '#FF0000',
-        strokeOpacity: 1.0,
-        strokeWeight: 2
-    });
-
     braintreePath.setMap(map);
 }
