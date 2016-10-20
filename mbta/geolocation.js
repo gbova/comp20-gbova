@@ -32,29 +32,32 @@ var ashmontPosition = new google.maps.LatLng(42.284652, -71.06448899999999);
    Used exclusively with the Haversine Formula to determine nearby stations */
 var redLineCoordinates = 
 {
-	alewifePosition:		[-71.142483, 42.395428],
-	davisPosition: 			[-71.121815, 42.39674],
-	porterPosition: 		[-71.11914899999999, 42.3884],
-	harvardPosition: 		[-71.118956, 42.373362],
-	centralPosition: 		[-71.118956, 42.373362],
-	kendallPosition: 		[-71.08617653, 42.36249079],
-	charlesMGHPosition: 	[-71.070628, 42.361166],
-	parkPosition: 			[-71.0624242, 42.35639457],
-	downtownCrossingPosition: [-71.060225, 42.355518],
-	southPosition: 			[-71.05524200000001, 42.352271],
-	broadwayPosition: 		[-71.056967, 42.342622],
-	andrewPosition: 		[-71.057655, 42.330154],
-	jfkPosition: 			[-71.052391, 42.320685],
-	northQuincyPosition:	[-71.0203369, 42.275275],
-	wollastonPosition: 		[-71.0203369, 42.2665139],
-	quincyCPosition:		[-71.005409, 42.251809],
-	quincyAPosition: 		[-71.007153, 42.233391],
-	braintreePosition: 		[-71.0011385, 42.2078543],
-	savinHillPosition: 		[-71.053331, 42.31129],
-	fieldsCornerPosition: 	[-71.061667, 42.300093],
-	shawmutPosition: 		[-71.06573796000001, 42.29312583],
-	ashmontPosition: 		[-71.06448899999999, 42.284652]
+	"Alewife":				[-71.142483, 42.395428],
+	"Davis": 				[-71.121815, 42.39674],
+	"Porter": 				[-71.11914899999999, 42.3884],
+	"Harvard": 				[-71.118956, 42.373362],
+	"Central": 				[-71.118956, 42.373362],
+	"Kendall/MIT": 			[-71.08617653, 42.36249079],
+	"Charles/MGH": 			[-71.070628, 42.361166],
+	"Park Street": 			[-71.0624242, 42.35639457],
+	"Downtown Crossing": 	[-71.060225, 42.355518],
+	"South Station": 		[-71.05524200000001, 42.352271],
+	"Broadway": 			[-71.056967, 42.342622],
+	"Andrew": 				[-71.057655, 42.330154],
+	"JFK/UMass": 			[-71.052391, 42.320685],
+	"North Quincy":			[-71.0203369, 42.275275],
+	"Wollaston": 			[-71.0203369, 42.2665139],
+	"Quincy Central":		[-71.005409, 42.251809],
+	"Quincy Adams": 		[-71.007153, 42.233391],
+	"Braintree": 			[-71.0011385, 42.2078543],
+	"Savin Hill": 			[-71.053331, 42.31129],
+	"Fields Corner": 		[-71.061667, 42.300093],
+	"Shawmut": 				[-71.06573796000001, 42.29312583],
+	"Ashmont": 				[-71.06448899999999, 42.284652]
 }
+
+var distanceToMyStation = 0;
+var closestStation = "Closest Station";
 
 
 
@@ -95,9 +98,17 @@ function getMyLocation() {
 
 
 
-
-/* NOTE: This function takes coordinates in the order [longitude, latitude]
-   This order is flipped elsewhere in the program  */
+/* haversineDistance
+Arguments:
+	Two lists ([longitude, latitude])
+	Boolean value
+Returns:
+	The distance between the two coordinates
+	If isMiles is true, returns the value in miles
+NOTE:
+	This function takes coordinates in the order [longitude, latitude]
+	This order is flipped elsewhere in the program
+	This fuction was takenf from answers on StackOverflow  */
 function haversineDistance(coords1, coords2, isMiles) {
   function toRad(x) {
     return x * Math.PI / 180;
@@ -126,10 +137,16 @@ function haversineDistance(coords1, coords2, isMiles) {
   return d;
 }
 
-// Return the closest station to me coordinates
+
+/* showNearbyStation
+No arguments
+No return value
+
+Calculates the closest red line station to the user
+Draws a red polyline from the user to that station
+TODO: Save the name of the station and the distance in miles */
 function showNearbyStation() {
-	/* Initialize with distance to Alewife, using the Haversine
-	   Distance formula, in miles, from StackOverflow */
+	/* Initialize with distance to Alewife */
 	var shortestDistance = haversineDistance([myLng, myLat], [-71.142483, 42.395428], true);
 	var latitude = -71.142483;
 	var longitude = 42.395428;
@@ -144,16 +161,17 @@ function showNearbyStation() {
 		if (distance < shortestDistance) {
 			shortestDistance = distance;
 			closestStation = station;
+			distanceToMyStation = distance;
 			latitude = coords[1];
 			longitude = coords[0];
 		}
 	}
 
 	// Create a polyline from user's location to the closest station
-    var closestStation = new google.maps.LatLng(latitude, longitude);
+    var closestStationPosition = new google.maps.LatLng(latitude, longitude);
 	var meToNearbyStation = [
 		me,
-		closestStation
+		closestStationPosition
     ];
     var nearByStationPath = new google.maps.Polyline({
     	path: meToNearbyStation,
@@ -163,6 +181,62 @@ function showNearbyStation() {
         strokeWeight: 2
     });
     nearByStationPath.setMap(map);
+}
+
+/* showRedLine
+No arguments
+No return value
+
+Creates a path along the red line stations, accounting for the split at JFK
+Creats a polyling connecting each station */
+function showRedLine() {
+	// body...
+	// The path that the red line follows to Ashmont:
+	var alewifeToAshmont = [
+		alewifePosition,
+		davisPosition,
+		porterPosition,
+		harvardPosition,
+		centralPosition,
+        kendallPosition,
+        charlesMGHPosition,
+        parkPosition,
+        downtownCrossingPosition,
+        southPosition,
+        broadwayPosition,
+        andrewPosition,
+        jfkPosition,
+    	savinHillPosition,
+		fieldsCornerPosition,
+		shawmutPosition,
+		ashmontPosition
+    ];
+    var ashmontPath = new google.maps.Polyline({
+    	path: alewifeToAshmont,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    });
+    ashmontPath.setMap(map);
+
+    // The red line splits at JFK: this is the Braintree line:
+	var alewifeToBraintree = [
+		jfkPosition,
+		northQuincyPosition,
+        wollastonPosition,
+        quincyCPosition,
+        quincyAPosition,
+        braintreePosition
+    ];
+    var braintreePath = new google.maps.Polyline({
+    	path: alewifeToBraintree,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    });
+    braintreePath.setMap(map);
 }
 
 
@@ -210,7 +284,7 @@ function renderMap() {
 	// Create a marker for Porter Square
 	porterSquare = new google.maps.Marker({
 		position: porterPosition,
-		title: "Porter Square",
+		title: "Porter",
 		icon: stationImage,
         shadow: stationShadow
 	});
@@ -224,7 +298,7 @@ function renderMap() {
 	// Create a marker for Harvard Square
 	harvardSquare = new google.maps.Marker({
 		position: harvardPosition,
-		title: "Harvard Square",
+		title: "Harvard",
 		icon: stationImage,
         shadow: stationShadow
 	});
@@ -478,7 +552,7 @@ function renderMap() {
 	// Create a marker for Central Square
 	centralSquare = new google.maps.Marker({
 		position: centralPosition,
-		title: "Central Square",
+		title: "Central",
 		icon: stationImage,
         shadow: stationShadow
 	});
@@ -530,62 +604,17 @@ function renderMap() {
 	});
 	marker.setMap(map);
 
-	// Open info window on click of marker
+	/* Open info window on click of marker
+	   Display the name of and distance to the closest Red Line station */
 	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.setContent(marker.title);
+		infowindow.setContent(distanceToMyStation.toFixed(2) + " miles to "
+			+ closestStation + "<br />" + "from your location");
 		infowindow.open(map, marker);
 	});
 
 
-	// The path that the red line follows to Ashmont:
-	var alewifeToAshmont = [
-		alewifePosition,
-		davisPosition,
-		porterPosition,
-		harvardPosition,
-		centralPosition,
-        kendallPosition,
-        charlesMGHPosition,
-        parkPosition,
-        downtownCrossingPosition,
-        southPosition,
-        broadwayPosition,
-        andrewPosition,
-        jfkPosition,
-    	savinHillPosition,
-		fieldsCornerPosition,
-		shawmutPosition,
-		ashmontPosition
-    ];
-    var ashmontPath = new google.maps.Polyline({
-    	path: alewifeToAshmont,
-        geodesic: true,
-        strokeColor: '#FF0000',
-        strokeOpacity: 1.0,
-        strokeWeight: 2
-    });
-    ashmontPath.setMap(map);
-
-    // The red line splits at JFK: this is the Braintree line:
-	var alewifeToBraintree = [
-		jfkPosition,
-		northQuincyPosition,
-        wollastonPosition,
-        quincyCPosition,
-        quincyAPosition,
-        braintreePosition
-    ];
-    var braintreePath = new google.maps.Polyline({
-    	path: alewifeToBraintree,
-        geodesic: true,
-        strokeColor: '#FF0000',
-        strokeOpacity: 1.0,
-        strokeWeight: 2
-    });
-    braintreePath.setMap(map);
-
+ 	// Show the path of the MBTA Red Line
+ 	showRedLine();
     // Show the station closes to the user on the map
     showNearbyStation();
-
-
 }
