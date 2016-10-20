@@ -3,16 +3,6 @@ var myLng = 0;
 var request = new XMLHttpRequest();
 var me = new google.maps.LatLng(myLat, myLng);
 
-var jfkPosition = new google.maps.LatLng(42.320685, -71.052391);
-var savinHillPosition = new google.maps.LatLng(42.31129, -71.053331);
-var fieldsCornerPosition = new google.maps.LatLng(42.300093, -71.061667);
-var shawmutPosition = new google.maps.LatLng(42.29312583, -71.06573796000001);
-var ashmontPosition = new google.maps.LatLng(42.284652, -71.06448899999999);
-var braintreePosition = new google.maps.LatLng(42.2078543, -71.0011385);
-var quincyAPosition = new google.maps.LatLng(42.233391, -71.007153);
-var quincyCPosition = new google.maps.LatLng(42.251809, -71.005409);
-var wollastonPosition = new google.maps.LatLng(42.2665139, -71.0203369);
-var northQuincyPosition = new google.maps.LatLng(42.275275, -71.0203369);
 var alewifePosition = new google.maps.LatLng(42.395428, -71.142483);
 var davisPosition = new google.maps.LatLng(42.39674, -71.121815);
 var porterPosition = new google.maps.LatLng(42.3884, -71.11914899999999);
@@ -25,6 +15,49 @@ var downtownCrossingPosition = new google.maps.LatLng(42.355518, -71.060225);
 var southPosition = new google.maps.LatLng(42.352271, -71.05524200000001);
 var broadwayPosition = new google.maps.LatLng(42.342622, -71.056967);
 var andrewPosition = new google.maps.LatLng(42.330154, -71.057655);
+var jfkPosition = new google.maps.LatLng(42.320685, -71.052391);
+var northQuincyPosition = new google.maps.LatLng(42.275275, -71.0203369);
+var wollastonPosition = new google.maps.LatLng(42.2665139, -71.0203369);
+var quincyCPosition = new google.maps.LatLng(42.251809, -71.005409);
+
+var quincyAPosition = new google.maps.LatLng(42.233391, -71.007153);
+var braintreePosition = new google.maps.LatLng(42.2078543, -71.0011385);
+var savinHillPosition = new google.maps.LatLng(42.31129, -71.053331);
+var fieldsCornerPosition = new google.maps.LatLng(42.300093, -71.061667);
+var shawmutPosition = new google.maps.LatLng(42.29312583, -71.06573796000001);
+var ashmontPosition = new google.maps.LatLng(42.284652, -71.06448899999999);
+
+/* redLineCoordinates
+   Dictionary containing: GoogleMaps lat/long : Numeric [long, lat]
+   Used exclusively with the Haversine Formula to determine nearby stations */
+var redLineCoordinates = 
+{
+	alewifePosition:		[-71.142483, 42.395428],
+	davisPosition: 			[-71.121815, 42.39674],
+	porterPosition: 		[-71.11914899999999, 42.3884],
+	harvardPosition: 		[-71.118956, 42.373362],
+	centralPosition: 		[-71.118956, 42.373362],
+	kendallPosition: 		[-71.08617653, 42.36249079],
+	charlesMGHPosition: 	[-71.070628, 42.361166],
+	parkPosition: 			[-71.0624242, 42.35639457],
+	downtownCrossingPosition: [-71.060225, 42.355518],
+	southPosition: 			[-71.05524200000001, 42.352271],
+	broadwayPosition: 		[-71.056967, 42.342622],
+	andrewPosition: 		[-71.057655, 42.330154],
+	jfkPosition: 			[-71.052391, 42.320685],
+	northQuincyPosition:	[-71.0203369, 42.275275],
+	wollastonPosition: 		[-71.0203369, 42.2665139],
+	quincyCPosition:		[-71.005409, 42.251809],
+	quincyAPosition: 		[-71.007153, 42.233391],
+	braintreePosition: 		[-71.0011385, 42.2078543],
+	savinHillPosition: 		[-71.053331, 42.31129],
+	fieldsCornerPosition: 	[-71.061667, 42.300093],
+	shawmutPosition: 		[-71.06573796000001, 42.29312583],
+	ashmontPosition: 		[-71.06448899999999, 42.284652]
+}
+
+
+
 
 var myOptions = {
 	zoom: 13, // The larger the zoom number, the bigger the zoom
@@ -56,6 +89,83 @@ function getMyLocation() {
 		alert("Geolocation is not supported by your web browser");
 	}
 }
+
+
+
+
+
+
+
+/* NOTE: This function takes coordinates in the order [longitude, latitude]
+   This order is flipped elsewhere in the program  */
+function haversineDistance(coords1, coords2, isMiles) {
+  function toRad(x) {
+    return x * Math.PI / 180;
+  }
+
+  var lon1 = coords1[0];
+  var lat1 = coords1[1];
+
+  var lon2 = coords2[0];
+  var lat2 = coords2[1];
+
+  var R = 6371; // km
+
+  var x1 = lat2 - lat1;
+  var dLat = toRad(x1);
+  var x2 = lon2 - lon1;
+  var dLon = toRad(x2)
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+
+  if(isMiles) d /= 1.60934;
+
+  return d;
+}
+
+// Return the closest station to me coordinates
+function showNearbyStation() {
+	/* Initialize with distance to Alewife, using the Haversine
+	   Distance formula, in miles, from StackOverflow */
+	var shortestDistance = haversineDistance([myLng, myLat], [-71.142483, 42.395428], true);
+	var latitude = -71.142483;
+	var longitude = 42.395428;
+
+	// Iterate over the remaining coordinates in redLineCoordinates
+	for (station in redLineCoordinates) {
+		var coords = redLineCoordinates[station];
+		var distance = haversineDistance([myLng, myLat], coords, true);
+
+		/* If the current station is closer than the information we have from before,
+		   save the current station information before continuing through the loop */
+		if (distance < shortestDistance) {
+			shortestDistance = distance;
+			closestStation = station;
+			latitude = coords[1];
+			longitude = coords[0];
+		}
+	}
+
+	// Create a polyline from user's location to the closest station
+    var closestStation = new google.maps.LatLng(latitude, longitude);
+	var meToNearbyStation = [
+		me,
+		closestStation
+    ];
+    var nearByStationPath = new google.maps.Polyline({
+    	path: meToNearbyStation,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    });
+    nearByStationPath.setMap(map);
+}
+
+
 
 function renderMap() {
 
@@ -427,8 +537,8 @@ function renderMap() {
 	});
 
 
-	// The path that the red line follows:
-	var redLineCoordinates = [
+	// The path that the red line follows to Ashmont:
+	var alewifeToAshmont = [
 		alewifePosition,
 		davisPosition,
 		porterPosition,
@@ -447,17 +557,17 @@ function renderMap() {
 		shawmutPosition,
 		ashmontPosition
     ];
-    var redLinePath = new google.maps.Polyline({
-    	path: redLineCoordinates,
+    var ashmontPath = new google.maps.Polyline({
+    	path: alewifeToAshmont,
         geodesic: true,
         strokeColor: '#FF0000',
         strokeOpacity: 1.0,
         strokeWeight: 2
     });
-    redLinePath.setMap(map);
+    ashmontPath.setMap(map);
 
     // The red line splits at JFK: this is the Braintree line:
-	var braintreeCoordinates = [
+	var alewifeToBraintree = [
 		jfkPosition,
 		northQuincyPosition,
         wollastonPosition,
@@ -466,11 +576,16 @@ function renderMap() {
         braintreePosition
     ];
     var braintreePath = new google.maps.Polyline({
-    	path: braintreeCoordinates,
+    	path: alewifeToBraintree,
         geodesic: true,
         strokeColor: '#FF0000',
         strokeOpacity: 1.0,
         strokeWeight: 2
     });
     braintreePath.setMap(map);
+
+    // Show the station closes to the user on the map
+    showNearbyStation();
+
+
 }
