@@ -7,7 +7,7 @@ var alewifePosition = new google.maps.LatLng(42.395428, -71.142483);
 var davisPosition = new google.maps.LatLng(42.39674, -71.121815);
 var porterPosition = new google.maps.LatLng(42.3884, -71.11914899999999);
 var harvardPosition = new google.maps.LatLng(42.373362, -71.118956);
-var centralPosition = new google.maps.LatLng(42.373362, -71.118956);
+var centralPosition = new google.maps.LatLng(42.365486, -71.103802);
 var kendallPosition = new google.maps.LatLng(42.36249079, -71.08617653);
 var charlesMGHPosition = new google.maps.LatLng(42.361166, -71.070628);
 var parkPosition = new google.maps.LatLng(42.35639457, -71.0624242);
@@ -59,19 +59,21 @@ var redLineCoordinates =
 var distanceToMyStation = 0;
 var closestStation = "Closest Station";
 
+// Make an Http Request to 
+var timetable;
+getTimetable();
 
 
 
 var myOptions = {
-	zoom: 13, // The larger the zoom number, the bigger the zoom
+	zoom: 12, // The larger the zoom number, the bigger the zoom
 	center: me,
 	mapTypeId: google.maps.MapTypeId.ROADMAP
 };
 
+// Variables needed to work with Google Maps:
 var map;
-
 var marker;
-
 var infowindow = new google.maps.InfoWindow();
 			
 
@@ -92,10 +94,6 @@ function getMyLocation() {
 		alert("Geolocation is not supported by your web browser");
 	}
 }
-
-
-
-
 
 
 /* haversineDistance
@@ -183,6 +181,7 @@ function showNearbyStation() {
     nearByStationPath.setMap(map);
 }
 
+
 /* showRedLine
 No arguments
 No return value
@@ -240,6 +239,105 @@ function showRedLine() {
 }
 
 
+/* getTimetable
+No arguments
+No return value
+
+Create a new XMLHttpRequest and GET Red Line data */
+function getTimetable()
+{
+	// Step 1: create an instance of XMLHttpRequest
+	request = new XMLHttpRequest();
+	
+	// Step 2: Make request to remote resource
+	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json", true);
+	
+	// Step 3: Create handler function to do something with data in response
+	request.onreadystatechange = openTimetableResponse;
+	
+	// Step 4: Send the request
+	request.send();
+}
+
+
+/* openTimetableResponse
+No arguments
+No return value
+
+Deals with response data from the Http request and parses any return JSON
+into a usable timetable of the MBTA Red Line */
+function openTimetableResponse()
+{
+	console.log("The data is => " + request.responseText);
+	
+	// Data has been received
+	if (request.readyState == 4 && request.status == 200) {
+
+		// Parse the text into JSON
+		var theData = request.responseText;
+		var parsedData = JSON.parse(theData);
+
+		// Parse the JSON into the trips we are interested in
+		timetable = parsedData["TripList"]["Trips"];
+	}
+
+	// Page not found
+	if (request.status == 404) {
+		console.log("404 Error");
+		alert("Error: Please refresh the page to see the Red Line");
+	}
+}
+
+
+
+/* getStationInfo
+Argument:
+	string (the given station's name)
+Returns:
+	The info about incoming trains to the given station
+	To be used in the station marker's window
+
+Parse the timetable (from the MBTA's JSON) for predictions about
+the incoming traffic and the given station */
+function getStationInfo(stationName) {
+	timetableMessage = "";
+	var numTrips = timetable.length;
+
+	// Iterate through all the trips in timetable
+	for (var t = 0; t < numTrips; t++) {
+		var trip = timetable[t];
+		var destination = trip["Destination"];
+		var time = 0;
+		var numPredictions = trip["Predictions"].length;
+
+		// Iterate through all the predictions for this train
+		for (var p = 0; p< numPredictions; p++) {
+			var prediction = trip["Predictions"][p];
+
+			// Look only for information about given stop
+			if (prediction["Stop"] == stationName) {
+				time = prediction["Seconds"];
+				break;
+			}
+		}
+
+		// Update the station's message
+		if (time > 0) {
+			if (timetableMessage != "") {
+				timetableMessage += "<br />";
+			}
+			time = time / 60;
+			timetableMessage += destination + " " + time.toFixed(2) + "minutes";
+		}
+	}
+
+	return timetableMessage;
+}
+
+
+
+
+
 
 function renderMap() {
 
@@ -250,153 +348,19 @@ function renderMap() {
 	var stationShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
 		new google.maps.Size(40, 37), new google.maps.Point(0, 0), new google.maps.Point(12, 35));
 
-	
-	// Create a marker for Andrew
-	andrewMarker = new google.maps.Marker({
-		position: andrewPosition,
-		title: "Andrew",
+	// Create a marker for Alewife
+	alewife = new google.maps.Marker({
+		position: alewifePosition,
+		title: "Alewife",
 		icon: stationImage,
         shadow: stationShadow
 	});
-	andrewMarker.setMap(map);
+	alewife.setMap(map);
 
-	google.maps.event.addListener(andrewMarker, 'click', function() {
-		infowindow.setContent(andrewMarker.title);
-		infowindow.open(map, andrewMarker);
-	});
-
-
-	// Create a marker for South Station
-	southStation = new google.maps.Marker({
-		position: southPosition,
-		title: "South Station",
-		icon: stationImage,
-        shadow: stationShadow
-   	});
-	southStation.setMap(map);
-
-	google.maps.event.addListener(southStation, 'click', function() {
-		infowindow.setContent(southStation.title);
-		infowindow.open(map, southStation);
-	});
-
-
-	// Create a marker for Porter Square
-	porterSquare = new google.maps.Marker({
-		position: porterPosition,
-		title: "Porter",
-		icon: stationImage,
-        shadow: stationShadow
-	});
-	porterSquare.setMap(map);
-
-	google.maps.event.addListener(porterSquare, 'click', function() {
-		infowindow.setContent(porterSquare.title);
-		infowindow.open(map, porterSquare);
-	});
-
-	// Create a marker for Harvard Square
-	harvardSquare = new google.maps.Marker({
-		position: harvardPosition,
-		title: "Harvard",
-		icon: stationImage,
-        shadow: stationShadow
-	});
-	harvardSquare.setMap(map);
-
-	google.maps.event.addListener(harvardSquare, 'click', function() {
-		infowindow.setContent(harvardSquare.title);
-		infowindow.open(map, harvardSquare);
-	});
-
-
-	// Create a marker for JFK/UMass
-	jfkMarker = new google.maps.Marker({
-		position: jfkPosition,
-		title: "JFK/UMass",
-		icon: stationImage,
-        shadow: stationShadow
-	});
-	jfkMarker.setMap(map);
-
-	google.maps.event.addListener(jfkMarker, 'click', function() {
-		infowindow.setContent(jfkMarker.title);
-		infowindow.open(map, jfkMarker);
-	});
-
-
-	// Create a marker for Savin Hill
-	savinHill = new google.maps.Marker({
-		position: savinHillPosition,
-		title: "Savin Hill",
-		icon: stationImage,
-        shadow: stationShadow
-	});
-	savinHill.setMap(map);
-
-	google.maps.event.addListener(savinHill, 'click', function() {
-		infowindow.setContent(savinHill.title);
-		infowindow.open(map, savinHill);
-	});
-
-
-	// Create a marker for Park Street
-	parkStreet = new google.maps.Marker({
-		position: parkPosition,
-		title: "Park Street",
-		icon: stationImage,
-        shadow: stationShadow
-	});
-	parkStreet.setMap(map);
-
-	google.maps.event.addListener(parkStreet, 'click', function() {
-		infowindow.setContent(parkStreet.title);
-		infowindow.open(map, parkStreet);
-	});
-
-
-	// Create a marker for Broadway
-	broadway = new google.maps.Marker({
-		position: broadwayPosition,
-		title: "Broadway",
-		icon: stationImage,
-        shadow: stationShadow
-	});
-	broadway.setMap(map);
-
-	google.maps.event.addListener(broadway, 'click', function() {
-		infowindow.setContent(broadway.title);
-		infowindow.open(map, broadway);
-	});
-
-
-	// Create a marker for North Quincy
-	northQuincy = new google.maps.Marker({
-		position: northQuincyPosition,
-		title: "North Quincy",
-		icon: stationImage,
-        shadow: stationShadow
-	});
-	northQuincy.setMap(map);
-
-	google.maps.event.addListener(northQuincy, 'click', function() {
-		infowindow.setContent(northQuincy.title);
-		infowindow.open(map, northQuincy);
-	});
-
-
-	// Create a marker for Shawmut
-	shawmut = new google.maps.Marker({
-		position: shawmutPosition,
-		title: "Shawmut",
-		icon: stationImage,
-        shadow: stationShadow
-	});
-	shawmut.setMap(map);
-
-	google.maps.event.addListener(shawmut, 'click', function() {
-		infowindow.setContent(shawmut.title);
-		infowindow.open(map, shawmut);
+	google.maps.event.addListener(alewife, 'click', function() {
+		stationInfo = getStationInfo(alewife.title);
+		infowindow.setContent(alewife.title + "<br />" + stationInfo);
+		infowindow.open(map, alewife);
 	});
 
 
@@ -410,23 +374,57 @@ function renderMap() {
 	davis.setMap(map);
 
 	google.maps.event.addListener(davis, 'click', function() {
-		infowindow.setContent(davis.title);
+		stationInfo = getStationInfo(davis.title);
+		infowindow.setContent(davis.title + "<br />" + stationInfo);
 		infowindow.open(map, davis);
 	});
 
 
-	// Create a marker for Alewife
-	alewife = new google.maps.Marker({
-		position: alewifePosition,
-		title: "Alewife",
+	// Create a marker for Porter Square
+	porterSquare = new google.maps.Marker({
+		position: porterPosition,
+		title: "Porter Square",
 		icon: stationImage,
         shadow: stationShadow
 	});
-	alewife.setMap(map);
+	porterSquare.setMap(map);
 
-	google.maps.event.addListener(alewife, 'click', function() {
-		infowindow.setContent(alewife.title);
-		infowindow.open(map, alewife);
+	google.maps.event.addListener(porterSquare, 'click', function() {
+		stationInfo = getStationInfo(porterSquare.title);
+		infowindow.setContent(porterSquare.title + "<br />" + stationInfo);
+		infowindow.open(map, porterSquare);
+	});
+
+
+	// Create a marker for Harvard Square
+	harvardSquare = new google.maps.Marker({
+		position: harvardPosition,
+		title: "Harvard Square",
+		icon: stationImage,
+        shadow: stationShadow
+	});
+	harvardSquare.setMap(map);
+
+	google.maps.event.addListener(harvardSquare, 'click', function() {
+		stationInfo = getStationInfo(harvardSquare.title);
+		infowindow.setContent(harvardSquare.title + "<br />" + stationInfo);
+		infowindow.open(map, harvardSquare);
+	});
+
+
+	// Create a marker for Central Square
+	centralSquare = new google.maps.Marker({
+		position: centralPosition,
+		title: "Central Square",
+		icon: stationImage,
+        shadow: stationShadow
+	});
+	centralSquare.setMap(map);
+
+	google.maps.event.addListener(centralSquare, 'click', function() {
+		stationInfo = getStationInfo(centralSquare.title);
+		infowindow.setContent(centralSquare.title + "<br />" + stationInfo);
+		infowindow.open(map, centralSquare);
 	});
 
 
@@ -442,7 +440,8 @@ function renderMap() {
 	kendallMarker.setMap(map);
 
 	google.maps.event.addListener(kendallMarker, 'click', function() {
-		infowindow.setContent(kendallMarker.title);
+		stationInfo = getStationInfo(kendallMarker.title);
+		infowindow.setContent(kendallMarker.title + "<br />" + stationInfo);
 		infowindow.open(map, kendallMarker);
 	});
 
@@ -457,9 +456,27 @@ function renderMap() {
 	charlesMGH.setMap(map);
 
 	google.maps.event.addListener(charlesMGH, 'click', function() {
-		infowindow.setContent(charlesMGH.title);
+		stationInfo = getStationInfo(charlesMGH.title);
+		infowindow.setContent(charlesMGH.title + "<br />" + stationInfo);
 		infowindow.open(map, charlesMGH);
 	});
+
+
+	// Create a marker for Park Street
+	parkStreet = new google.maps.Marker({
+		position: parkPosition,
+		title: "Park Street",
+		icon: stationImage,
+        shadow: stationShadow
+	});
+	parkStreet.setMap(map);
+
+	google.maps.event.addListener(parkStreet, 'click', function() {
+		stationInfo = getStationInfo(parkStreet.title);
+		infowindow.setContent(parkStreet.title + "<br />" + stationInfo);
+		infowindow.open(map, parkStreet);
+	});
+
 
 	// Create a marker for Downtown Crossing
 	downtownCrossing = new google.maps.Marker({
@@ -471,51 +488,89 @@ function renderMap() {
 	downtownCrossing.setMap(map);
 
 	google.maps.event.addListener(downtownCrossing, 'click', function() {
-		infowindow.setContent(downtownCrossing.title);
+		stationInfo = getStationInfo(downtownCrossing.title);
+		infowindow.setContent(downtownCrossing.title + "<br />" + stationInfo);
 		infowindow.open(map, downtownCrossing);
 	});
 
-	// Create a marker for Quincy Center
-	quincyCenter = new google.maps.Marker({
-		position: quincyCPosition,
-		title: "Quincy Center",
+
+	// Create a marker for South Station
+	southStation = new google.maps.Marker({
+		position: southPosition,
+		title: "South Station",
+		icon: stationImage,
+        shadow: stationShadow
+   	});
+	southStation.setMap(map);
+
+	google.maps.event.addListener(southStation, 'click', function() {
+		stationInfo = getStationInfo(southStation.title);
+		infowindow.setContent(southStation.title + "<br />" + stationInfo);
+		infowindow.open(map, southStation);
+	});
+
+
+	// Create a marker for Broadway
+	broadway = new google.maps.Marker({
+		position: broadwayPosition,
+		title: "Broadway",
 		icon: stationImage,
         shadow: stationShadow
 	});
-	quincyCenter.setMap(map);
+	broadway.setMap(map);
 
-	google.maps.event.addListener(quincyCenter, 'click', function() {
-		infowindow.setContent(quincyCenter.title);
-		infowindow.open(map, quincyCenter);
+	google.maps.event.addListener(broadway, 'click', function() {
+		stationInfo = getStationInfo(broadway.title);
+		infowindow.setContent(broadway.title + "<br />" + stationInfo);
+		infowindow.open(map, broadway);
 	});
 
-	// Create a marker for Quincy Adams
-	quincyAdams = new google.maps.Marker({
-		position: quincyAPosition,
-		title: "Quincy Adams",
+
+	// Create a marker for Andrew
+	andrewMarker = new google.maps.Marker({
+		position: andrewPosition,
+		title: "Andrew",
 		icon: stationImage,
         shadow: stationShadow
 	});
-	quincyAdams.setMap(map);
+	andrewMarker.setMap(map);
 
-	google.maps.event.addListener(quincyAdams, 'click', function() {
-		infowindow.setContent(quincyAdams.title);
-		infowindow.open(map, quincyAdams);
+	google.maps.event.addListener(andrewMarker, 'click', function() {
+		stationInfo = getStationInfo(andrewMarker.title);
+		infowindow.setContent(andrewMarker.title + "<br />" + stationInfo);
+		infowindow.open(map, andrewMarker);
 	});
 
 
-	// Create a marker for Ashmont
-	ashmont = new google.maps.Marker({
-		position: ashmontPosition,
-		title: "Ashmont",
+	// Create a marker for JFK/UMass
+	jfkMarker = new google.maps.Marker({
+		position: jfkPosition,
+		title: "JFK/UMass",
 		icon: stationImage,
         shadow: stationShadow
 	});
-	ashmont.setMap(map);
+	jfkMarker.setMap(map);
 
-	google.maps.event.addListener(ashmont, 'click', function() {
-		infowindow.setContent(ashmont.title);
-		infowindow.open(map, ashmont);
+	google.maps.event.addListener(jfkMarker, 'click', function() {
+		stationInfo = getStationInfo(jfkMarker.title);
+		infowindow.setContent(jfkMarker.title + "<br />" + stationInfo);
+		infowindow.open(map, jfkMarker);
+	});
+
+
+	// Create a marker for North Quincy
+	northQuincy = new google.maps.Marker({
+		position: northQuincyPosition,
+		title: "North Quincy",
+		icon: stationImage,
+        shadow: stationShadow
+	});
+	northQuincy.setMap(map);
+
+	google.maps.event.addListener(northQuincy, 'click', function() {
+		stationInfo = getStationInfo(northQuincy.title);
+		infowindow.setContent(northQuincy.title + "<br />" + stationInfo);
+		infowindow.open(map, northQuincy);
 	});
 
 
@@ -529,38 +584,41 @@ function renderMap() {
 	wollaston.setMap(map);
 
 	google.maps.event.addListener(wollaston, 'click', function() {
-		infowindow.setContent(wollaston.title);
+		stationInfo = getStationInfo(wollaston.title);
+		infowindow.setContent(wollaston.title + "<br />" + stationInfo);
 		infowindow.open(map, wollaston);
 	});
 
 
-	// Create a marker for Fields Corner
-	fieldsCorner = new google.maps.Marker({
-		position: fieldsCornerPosition,
-		title: "Fields Corner",
+	// Create a marker for Quincy Center
+	quincyCenter = new google.maps.Marker({
+		position: quincyCPosition,
+		title: "Quincy Center",
 		icon: stationImage,
         shadow: stationShadow
 	});
-	fieldsCorner.setMap(map);
+	quincyCenter.setMap(map);
 
-	google.maps.event.addListener(fieldsCorner, 'click', function() {
-		infowindow.setContent(fieldsCorner.title);
-		infowindow.open(map, fieldsCorner);
+	google.maps.event.addListener(quincyCenter, 'click', function() {
+		stationInfo = getStationInfo(quincyCenter.title);
+		infowindow.setContent(quincyCenter.title + "<br />" + stationInfo);
+		infowindow.open(map, quincyCenter);
 	});
 
 
-	// Create a marker for Central Square
-	centralSquare = new google.maps.Marker({
-		position: centralPosition,
-		title: "Central",
+	// Create a marker for Quincy Adams
+	quincyAdams = new google.maps.Marker({
+		position: quincyAPosition,
+		title: "Quincy Adams",
 		icon: stationImage,
         shadow: stationShadow
 	});
-	centralSquare.setMap(map);
+	quincyAdams.setMap(map);
 
-	google.maps.event.addListener(centralSquare, 'click', function() {
-		infowindow.setContent(centralSquare.title);
-		infowindow.open(map, centralSquare);
+	google.maps.event.addListener(quincyAdams, 'click', function() {
+		stationInfo = getStationInfo(quincyAdams.title);
+		infowindow.setContent(quincyAdams.title + "<br />" + stationInfo);
+		infowindow.open(map, quincyAdams);
 	});
 
 
@@ -574,11 +632,74 @@ function renderMap() {
 	braintree.setMap(map);
 
 	google.maps.event.addListener(braintree, 'click', function() {
-		infowindow.setContent(braintree.title);
+		stationInfo = getStationInfo(braintree.title);
+		infowindow.setContent(braintree.title + "<br />" + stationInfo);
 		infowindow.open(map, braintree);
 	});
 
 
+	// Create a marker for Savin Hill
+	savinHill = new google.maps.Marker({
+		position: savinHillPosition,
+		title: "Savin Hill",
+		icon: stationImage,
+        shadow: stationShadow
+	});
+	savinHill.setMap(map);
+
+	google.maps.event.addListener(savinHill, 'click', function() {
+		stationInfo = getStationInfo(savinHill.title);
+		infowindow.setContent(savinHill.title + "<br />" + stationInfo);
+		infowindow.open(map, savinHill);
+	});
+
+
+	// Create a marker for Fields Corner
+	fieldsCorner = new google.maps.Marker({
+		position: fieldsCornerPosition,
+		title: "Fields Corner",
+		icon: stationImage,
+        shadow: stationShadow
+	});
+	fieldsCorner.setMap(map);
+
+	google.maps.event.addListener(fieldsCorner, 'click', function() {
+		stationInfo = getStationInfo(fieldsCorner.title);
+		infowindow.setContent(fieldsCorner.title + "<br />" + stationInfo);
+		infowindow.open(map, fieldsCorner);
+	});
+
+
+	// Create a marker for Shawmut
+	shawmut = new google.maps.Marker({
+		position: shawmutPosition,
+		title: "Shawmut",
+		icon: stationImage,
+        shadow: stationShadow
+	});
+	shawmut.setMap(map);
+
+	google.maps.event.addListener(shawmut, 'click', function() {
+		stationInfo = getStationInfo(shawmut.title);
+		infowindow.setContent(shawmut.title + "<br />" + stationInfo);
+		infowindow.open(map, shawmut);
+	});
+
+
+	// Create a marker for Ashmont
+	ashmont = new google.maps.Marker({
+		position: ashmontPosition,
+		title: "Ashmont",
+		icon: stationImage,
+        shadow: stationShadow
+	});
+	ashmont.setMap(map);
+
+	google.maps.event.addListener(ashmont, 'click', function() {
+		stationInfo = getStationInfo(ashmont.title);
+		infowindow.setContent(ashmont.title + "<br />" + stationInfo);
+		infowindow.open(map, ashmont);
+	});
 
 
 
