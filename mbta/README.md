@@ -6,6 +6,7 @@ Assignment 2: Closest MBTA Station
 The site connects to the GoogleMaps API and Ming's MBTA API.
 The correct stations, user location, times, and distances are displayed.
 Only trips with positive, non-zero trip times are displayed.
+The icon for the user's location drops onto the screen.
 
 Only one XMLHttpRequest is made, which makes things quicker, because I
 don't have to send multiple requests, handle multiple errors, and parse

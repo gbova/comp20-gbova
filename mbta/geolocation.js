@@ -341,19 +341,16 @@ function getStationInfo(stationName) {
 
 function renderMap() {
 
-	// Custom color for MBTA Red Line Station pins
-	var stationColor = "54d3e5";
-	var stationImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
-		+ stationColor, new google.maps.Size(21, 34), new google.maps.Point(0,0), new google.maps.Point(10, 34));
-	var stationShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-		new google.maps.Size(40, 37), new google.maps.Point(0, 0), new google.maps.Point(12, 35));
+	// Custom MBTA train pin
+  	var MBTAMarker = {
+    	url: 'MBTA.png',
+    	scaledSize: new google.maps.Size(25, 25)
+	};
 
-	// Create a marker for Alewife
 	alewife = new google.maps.Marker({
 		position: alewifePosition,
 		title: "Alewife",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	alewife.setMap(map);
 
@@ -368,8 +365,7 @@ function renderMap() {
 	davis = new google.maps.Marker({
 		position: davisPosition,
 		title: "Davis",
-		icon: stationImage,
-        shadow: stationShadow
+        icon: MBTAMarker
 	});
 	davis.setMap(map);
 
@@ -384,8 +380,7 @@ function renderMap() {
 	porterSquare = new google.maps.Marker({
 		position: porterPosition,
 		title: "Porter Square",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	porterSquare.setMap(map);
 
@@ -400,8 +395,7 @@ function renderMap() {
 	harvardSquare = new google.maps.Marker({
 		position: harvardPosition,
 		title: "Harvard Square",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	harvardSquare.setMap(map);
 
@@ -416,8 +410,7 @@ function renderMap() {
 	centralSquare = new google.maps.Marker({
 		position: centralPosition,
 		title: "Central Square",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	centralSquare.setMap(map);
 
@@ -432,10 +425,7 @@ function renderMap() {
 	kendallMarker = new google.maps.Marker({
 		position: kendallPosition,
 		title: "Kendall/MIT",
-		icon: stationImage,
-        shadow: stationShadow,
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	kendallMarker.setMap(map);
 
@@ -450,8 +440,7 @@ function renderMap() {
 	charlesMGH = new google.maps.Marker({
 		position: charlesMGHPosition,
 		title: "Charles/MGH",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	charlesMGH.setMap(map);
 
@@ -466,8 +455,7 @@ function renderMap() {
 	parkStreet = new google.maps.Marker({
 		position: parkPosition,
 		title: "Park Street",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	parkStreet.setMap(map);
 
@@ -482,8 +470,7 @@ function renderMap() {
 	downtownCrossing = new google.maps.Marker({
 		position: downtownCrossingPosition,
 		title: "Downtown Crossing",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	downtownCrossing.setMap(map);
 
@@ -498,8 +485,7 @@ function renderMap() {
 	southStation = new google.maps.Marker({
 		position: southPosition,
 		title: "South Station",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
    	});
 	southStation.setMap(map);
 
@@ -514,8 +500,7 @@ function renderMap() {
 	broadway = new google.maps.Marker({
 		position: broadwayPosition,
 		title: "Broadway",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	broadway.setMap(map);
 
@@ -530,8 +515,7 @@ function renderMap() {
 	andrewMarker = new google.maps.Marker({
 		position: andrewPosition,
 		title: "Andrew",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	andrewMarker.setMap(map);
 
@@ -546,8 +530,7 @@ function renderMap() {
 	jfkMarker = new google.maps.Marker({
 		position: jfkPosition,
 		title: "JFK/UMass",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	jfkMarker.setMap(map);
 
@@ -562,8 +545,7 @@ function renderMap() {
 	northQuincy = new google.maps.Marker({
 		position: northQuincyPosition,
 		title: "North Quincy",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	northQuincy.setMap(map);
 
@@ -578,8 +560,7 @@ function renderMap() {
 	wollaston = new google.maps.Marker({
 		position: wollastonPosition,
 		title: "Wollaston",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	wollaston.setMap(map);
 
@@ -594,8 +575,7 @@ function renderMap() {
 	quincyCenter = new google.maps.Marker({
 		position: quincyCPosition,
 		title: "Quincy Center",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	quincyCenter.setMap(map);
 
@@ -610,8 +590,7 @@ function renderMap() {
 	quincyAdams = new google.maps.Marker({
 		position: quincyAPosition,
 		title: "Quincy Adams",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	quincyAdams.setMap(map);
 
@@ -626,8 +605,7 @@ function renderMap() {
 	braintree = new google.maps.Marker({
 		position: braintreePosition,
 		title: "Braintree",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	braintree.setMap(map);
 
@@ -642,8 +620,7 @@ function renderMap() {
 	savinHill = new google.maps.Marker({
 		position: savinHillPosition,
 		title: "Savin Hill",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	savinHill.setMap(map);
 
@@ -658,8 +635,7 @@ function renderMap() {
 	fieldsCorner = new google.maps.Marker({
 		position: fieldsCornerPosition,
 		title: "Fields Corner",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	fieldsCorner.setMap(map);
 
@@ -674,8 +650,7 @@ function renderMap() {
 	shawmut = new google.maps.Marker({
 		position: shawmutPosition,
 		title: "Shawmut",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	shawmut.setMap(map);
 
@@ -690,8 +665,7 @@ function renderMap() {
 	ashmont = new google.maps.Marker({
 		position: ashmontPosition,
 		title: "Ashmont",
-		icon: stationImage,
-        shadow: stationShadow
+		icon: MBTAMarker
 	});
 	ashmont.setMap(map);
 
@@ -703,25 +677,23 @@ function renderMap() {
 
 
 
+
 	// Custom color for user's location pin
-	var mePinColor = "7373c7";
-	var mePinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
-		+ mePinColor, new google.maps.Size(21, 34), new google.maps.Point(0,0), new google.maps.Point(10, 34));
-	var mePinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-		new google.maps.Size(40, 37), new google.maps.Point(0, 0), new google.maps.Point(12, 35));
+  	var meMarker = {
+    	url: 'snake.png',
+    	scaledSize: new google.maps.Size(25, 25)
+	};
 
 	// Create a marker for the user and center there
 	me = new google.maps.LatLng(myLat, myLng);
-
-	// Update map and go there...
 	map.panTo(me);
 
 	// Create a marker
 	marker = new google.maps.Marker({
+		animation: google.maps.Animation.DROP,
 		position: me,
 		title: "Your location",
-		icon: mePinImage,
-        shadow: mePinShadow
+        icon: meMarker
 	});
 	marker.setMap(map);
 
