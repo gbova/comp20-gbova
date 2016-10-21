@@ -284,7 +284,7 @@ function openTimetableResponse()
 	// Page not found
 	if (request.status == 404) {
 		console.log("404 Error");
-		alert("Error: Please refresh the page to see the Red Line");
+		alert("Whoops! There was an error retrieving data on the MBTA Red Line. Please refresh the page to try again");
 	}
 }
 
