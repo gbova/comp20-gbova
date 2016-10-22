@@ -38,6 +38,9 @@ returns is called multiple times after errors.
 - Collaboration -
 I discusses the examples from class and on GitHub with Johnny Fairfield-Sonn
 
+I used the Haversine Distance formula and JavaScript function from the
+answers on StackOverflow.
+
 
 - Hours completing the assignment -
 15 hours
