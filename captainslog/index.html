@@ -9,6 +9,22 @@
 	<script>
 	  // Your work will be done here...
 	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			// Called when enter key is pressed
+			$(document).keypress(function(e) {
+   				if(e.which == 13) {
+        			var message = $('input').val();
+        			console.log("User input: " + message);
+        			// Add date/time to the message, save to local storage
+        			
+        			$("div#log").text('New message: ' + message);
+    			}
+			});
+		});
+	</script>
 </head>
 
 <body>
