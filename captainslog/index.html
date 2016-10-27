@@ -16,14 +16,37 @@
 			// Called when enter key is pressed
 			$(document).keypress(function(e) {
    				if(e.which == 13) {
+        			// Create the message
         			var message = $('input').val();
-        			console.log("User input: " + message);
-        			// Add date/time to the message, save to local storage
-        			
-        			$("div#log").text('New message: ' + message);
+        			var date = new Date().toDateString();
+        			var time = new Date().toLocaleTimeString();
+        			message = date + " " + time + " - " + message;
+        			console.log("User input at " + date + ": " + message);
+
+        			// Save the message to localStorage
+        			localStorage[new Date().getTime()] = message;
+
+        			// Print all messages in localStorage to browser        			
+        			// $("div#log").text(date + ' - ' + message);
+        			reload();
     			}
 			});
+
+			// Print all messages in localStorage to browser
+			console.log("Reloading");
+			reload();	
 		});
+
+
+		// Reload data from localStorage
+		function reload() {
+			elem = document.getElementById("log");
+			messages = "";
+			for (key in localStorage) {
+				messages = localStorage[key] + "<p>" + messages + "</p>\n";
+			}
+			elem.innerHTML = messages;
+	}
 	</script>
 </head>
 
