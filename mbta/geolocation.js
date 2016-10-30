@@ -267,9 +267,7 @@ No return value
 Deals with response data from the Http request and parses any return JSON
 into a usable timetable of the MBTA Red Line */
 function openTimetableResponse()
-{
-	console.log("The data is => " + request.responseText);
-	
+{	
 	// Data has been received
 	if (request.readyState == 4 && request.status == 200) {
 
@@ -283,7 +281,6 @@ function openTimetableResponse()
 
 	// Page not found
 	if (request.status == 404) {
-		console.log("404 Error");
 		alert("Whoops! There was an error retrieving data on the MBTA Red Line. Please refresh the page to try again");
 	}
 }
