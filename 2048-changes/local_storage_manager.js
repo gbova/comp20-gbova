@@ -67,16 +67,19 @@ LocalStorageManager.prototype.setGameState = function (gameState) {
  * Makes a POST request to save game score before deleting data locally
  */
 var request = new XMLHttpRequest();
-LocalStorageManager.prototype.clearGameState = function () {
+LocalStorageManager.prototype.clearGameState = function (username) {
+
+  var gameUser = "";
   // Load the entire gameState from localStorage:
   gameState = this.storage.getItem(this.gameStateKey);
   if (gameState == null) {    // Game was already cleared
     return;
+  } else {
+    gameUser = window.prompt("Game Over! Please submit a username", "");
   }
-  gameState = JSON.parse(gameState);
-  gameGrid = gameState["grid"];
-  gameScore = gameState["score"];
-  gameUser = "Gabriella";   // TODO: Change this and prompt user for username
+  var gameState = JSON.parse(gameState);
+  var gameGrid = gameState["grid"];
+  var gameScore = gameState["score"];
 
   // Make an HTTP POST request to the server:
   var url = "https://radiant-lake-20317.herokuapp.com/submit.json";
