@@ -11,7 +11,7 @@
 <h1 id="title">Security Report for Wesley Wei</h1>
 
 <h2>Introduction</h2>
-	<div id="text-block"> I was assigned to analyze any security issues wih Wesley Wei's webpage and API from Assignment 3. For the most part, he knows a lot about proper coding practices and was able to make his webpage fairly secure. </div>
+	<div id="text-block"> I was assigned to analyze any security issues with Wesley Wei's webpage and API from Assignment 3. For the most part, he knows a lot about proper coding practices and was able to make his webpage fairly secure. </div>
 
 <h2>Methodology</h2>
 	<div id="text-block"> To test the security of this webpage, I used cURL commands in the terminal, sent and requested data via Postman, and used Tamper Data to analyze reports on the reliability of the webpage and send missing or incorrect data. </div>
@@ -24,7 +24,10 @@
 	<img src="numberString1.png" alt="Smiley face" height="500" width="500">
 	<img src="numberString2.png" alt="Smiley face" height="500" width="500">
 
-	<div id="text-block"> Second issue </div>
+
+	<div id="text-block"> Wesley builds the page from scratch for the homepage and the "/scores.json" page, every time they are loaded. This is another safegaurd against XSS. However, adding code in script tags still messes with the webpage and gives error, even though the app still runs and does not execute any foreign code. </div>
+	<img src="foreignJavaScript.png" alt="Smiley face" height="500" width="500">
+
 
 	<div id="text-block"> Third issue </div>
 
