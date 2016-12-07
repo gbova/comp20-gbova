@@ -20,28 +20,26 @@
 	<div id="text-block"> Wesley removed extraneous characters from user input in his web application, so it was fairly secure from Cross-Site Scripting and will not execute foreign JavaScript. There were a few bugs that could lead to security problems and corrupt data. </div>
 
 <h2>Issues Found and Technical Analysis</h2>
+	<h4> Issue #1 </h4>
 	<div id="text-block"> The web app does not allow the user to submit number in string format:  </div>
 	<img src="numberString1.png" alt="Smiley face" height="500" width="500">
 	<img src="numberString2.png" alt="Smiley face" height="500" width="500">
 
 
+	<h4> Issue #2 </h4>
 	<div id="text-block"> Wesley builds the page from scratch for the homepage and the "/scores.json" page, every time they are loaded. This is another safegaurd against XSS. However, adding code in script tags still messes with the webpage and gives error, even though the app still runs and does not execute any foreign code. </div>
 	<img src="foreignJavaScript.png" alt="Smiley face" height="500" width="500">
 
 
+	<h4> Issue #3 </h4>
 	<div id="text-block"> While using cURL commands to POST to Wesley's API, the commands were breaking and I was not able to send a POST request with a user's username, score, and  grid </div>
 	<img src="cURLCommands.png" alt="Smiley face" height="200" width="500">
-
-	<div id="text-block"> Wesley does specify the HTML encoding to protect against Cross-Site Scripting, but there are even more secure ways to do that. Ideas for additional practices are available at: 
-
-	<a href="https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet">Security: XSS</a>
-
-	</div>
 
 
 
 
 <h2>Conclusion</h2>
+	<div id="text-block"> Wesley does specify the HTML encoding to protect against Cross-Site Scripting, but there are even more secure ways to do that. Ideas for additional practices are available at: <a href="https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet">Security: XSS</a>  </div>
 
 
 </body>
